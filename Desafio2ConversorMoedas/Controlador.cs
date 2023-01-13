@@ -1,4 +1,5 @@
-﻿using Desafio2ConversorMoedas.Interface;
+﻿using ConversorMoedas;
+using Desafio2ConversorMoedas.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,34 +11,36 @@ namespace Desafio2ConversorMoedas
     public class Controlador
     {
         bool isValid = false;
+        public InterfaceUsuario UI { get; private set; }
+        public Validador Validador { get; private set; }
+        public ConversorAPI API { get; private set; }
         public Controlador()
         {
             UI = new InterfaceUsuario();
             Validador = new Validador();
+            API = new ConversorAPI();
         }
 
-        public InterfaceUsuario UI { get; set; }
-        public Validador Validador { get; set; }
         public void Inicia()
-        {
-            try
-            {
-                SolicitaInformações();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
-        public void SolicitaInformações()
         {
             do
             {
-                SolicitaFormatoMoedaOrigem();
-                SolicitaFormatoMoedaDestino();
-                SolicitaValorConversao();
+                try
+                {
+                    SolicitaFormatoMoedaOrigem();
 
-                throw new NotImplementedException();
+                    if(UI.GetOrigem() == "")
+                        break;
+
+                    SolicitaFormatoMoedaDestino();
+                    SolicitaValorConversao();
+
+                    API.ConverteMoeda(UI.GetOrigem(), UI.GetDestino(), UI.GetValor());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
                 //Api respondeu?
                 //Busca na API
                 //Retorno é valido?
@@ -55,8 +58,11 @@ namespace Desafio2ConversorMoedas
             {
                 UI.SolicitaFormatoMoedaOrigem();
 
+                if (UI.GetOrigem() == "")
+                    break;
+
                 isValid = Validador.IsValidOrigem(UI.GetOrigem());
-            } while (!isValid);
+            } while (!isValid);/* || UI.GetOrigem() != "");*/
         }
         private void SolicitaFormatoMoedaDestino()
         {
