@@ -51,7 +51,7 @@ namespace ConversorMoedas
         private void MostraResultadoConversao()
         {
             var taxa = ValorConvertido?.GetTaxaConversao();
-            var valorOriginal = string.Format("{0:0.00}", Dados.Valor == null ? "0.00" : Dados.Valor);
+            var valorOriginal = string.Format("{0:0.00}", Dados.Valor == "0" ? "0.00" : Dados.Valor);
             var valorConvertido = string.Format("{0:0.00}", ValorConvertido.result == null ? 0 : ValorConvertido.result);
             var valorTaxa = string.Format("{0:0.000000}", taxa == null ? "0.000000" : taxa);
             Console.WriteLine($"\n{Dados.Origem} {valorOriginal} => {Dados.Destino} {valorConvertido}");
