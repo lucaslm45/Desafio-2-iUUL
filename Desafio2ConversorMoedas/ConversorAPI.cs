@@ -1,4 +1,5 @@
 ﻿using Desafio2ConversorMoedas.Models;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text.Json;
 
@@ -11,7 +12,7 @@ namespace ConversorMoedas
         public JsonValorTaxaConvertido? ValorConvertido { get; private set; }
         public EntradaDadosModel Dados { get; private set; }
 
-        public ConversorAPI() 
+        public ConversorAPI()
         {
             UriAPI = "https://api.exchangerate.host/convert?from=";
             Cliente = new HttpClient();
@@ -36,8 +37,8 @@ namespace ConversorMoedas
 
                 ValorConvertido = JsonSerializer.Deserialize<JsonValorTaxaConvertido>(conteudoTask.Result);
 
-                if (ValorConvertido is null || ValorConvertido.result == null || ValorConvertido.GetTaxaConversao() == null)
-                    throw new Exception("Erro: O formato da moeda de origem ou destino não é válido");
+                //if (ValorConvertido is null || ValorConvertido.result == null || ValorConvertido.GetTaxaConversao() == null)
+                //    throw new Exception("Erro: O formato da moeda de origem ou destino não é válido");
 
                 Console.WriteLine("Consulta na API concluída.");
 
@@ -46,11 +47,13 @@ namespace ConversorMoedas
             else
                 throw new Exception($"Erro: {response.StatusCode} + \" - \" + {response.ReasonPhrase}");
         }
+
         private void MostraResultadoConversao()
         {
-            var valorOriginal = string.Format("{0:0.00}", Dados.Valor);
-            var valorConvertido = string.Format("{0:0.00}", ValorConvertido?.result);
-            var valorTaxa = string.Format("{0:0.000000}", ValorConvertido?.GetTaxaConversao());
+            var taxa = ValorConvertido?.GetTaxaConversao();
+            var valorOriginal = string.Format("{0:0.00}", Dados.Valor == null ? "0.00" : Dados.Valor);
+            var valorConvertido = string.Format("{0:0.00}", ValorConvertido.result == null ? 0 : ValorConvertido.result);
+            var valorTaxa = string.Format("{0:0.000000}", taxa == null ? "0.000000" : taxa);
             Console.WriteLine($"\n{Dados.Origem} {valorOriginal} => {Dados.Destino} {valorConvertido}");
             Console.WriteLine($"Taxa: {valorTaxa}\n");
         }

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Desafio2ConversorMoedas.Models
 {
+    /// <summary>
+    /// Define o modelo de estrutura do arquivo JSON retornado pela API utilizada
+    /// </summary>
     public class JsonValorTaxaConvertidoModel
     {
         public Motd? motd { get; set; }
@@ -26,7 +29,7 @@ namespace Desafio2ConversorMoedas.Models
     {
         public string? from { get; set; }
         public string? to { get; set; }
-        public int? amount { get; set; }
+        public double? amount { get; set; }
     }
 
     public class Info

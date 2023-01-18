@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Desafio2ConversorMoedas.Models
 {
+    /// <summary>
+    /// Define o modelo de campos utilizados pelo programa
+    /// </summary>
     public class EntradaDadosModel
     {
         private string? origem;

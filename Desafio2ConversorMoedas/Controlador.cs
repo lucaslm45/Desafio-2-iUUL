@@ -29,26 +29,18 @@ namespace Desafio2ConversorMoedas
                 {
                     SolicitaFormatoMoedaOrigem();
 
-                    if(UI.GetOrigem() == "")
+                    if (UI.GetOrigem() == "")
                         break;
 
                     SolicitaFormatoMoedaDestino();
                     SolicitaValorConversao();
 
-                    API.ConverteMoeda(UI.GetOrigem(), UI.GetDestino(), UI.GetValor());
+                    API.ConverteMoeda(Validador.GetOrigem(), Validador.GetDestino(), Validador.GetValor());
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
-                //Api respondeu?
-                //Busca na API
-                //Retorno é valido?
-                //  Mostra na tela
-                //Senão
-                //  Erro:
-                //Senao
-                //  Erro: Api fora de alcance
 
             } while (UI.GetOrigem() != "");
         }
@@ -62,7 +54,7 @@ namespace Desafio2ConversorMoedas
                     break;
 
                 isValid = Validador.IsValidOrigem(UI.GetOrigem());
-            } while (!isValid);/* || UI.GetOrigem() != "");*/
+            } while (!isValid);
         }
         private void SolicitaFormatoMoedaDestino()
         {

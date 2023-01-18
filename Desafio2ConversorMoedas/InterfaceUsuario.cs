@@ -41,7 +41,7 @@ namespace Desafio2ConversorMoedas.Interface
         }
         public void SolicitaValorConversao()
         {
-            Console.Write("Valor: ");
+            Console.Write("Valor no formato en-US: ");
             Dados.Valor = Console.ReadLine();
         }
     }

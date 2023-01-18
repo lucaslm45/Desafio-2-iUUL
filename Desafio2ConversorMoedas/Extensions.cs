@@ -9,6 +9,12 @@ namespace Desafio2ConversorMoedas
 {
     public static class Extensions
     {
+        /// <summary>
+        /// Verifica se um texto possui três caracteres e se não é um número
+        /// </summary>
+        /// <param name="palavra"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static bool PossuiTresCaracteres(this string? palavra)
         {
             if (palavra?.Length != 3)
@@ -18,19 +24,19 @@ namespace Desafio2ConversorMoedas
 
             return true;
         }
-        public static double ConverteParaValorNumericoValido(this string? valor)
-        {
-            if (!double.TryParse(valor, out double valorConvertido))
-                throw new Exception("Erro: o Valor informado não é um número.");
-
-            return valorConvertido > 0 ? valorConvertido : throw new Exception("Erro: o Valor informado não é maior que zero.");
-        }
-        public static bool IsValorNumerico(this string? valor)
+        /// <summary>
+        /// Verifica se um texto é um número
+        /// </summary>
+        /// <param name="valor"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static double IsValorNumerico(this string? valor)
         {
             return !double.TryParse(valor, out double valorConvertido)
                 ? throw new Exception("Erro: o Valor informado não é um número.")
-                : valorConvertido > 0;
+                : valorConvertido;
         }
+
         public static bool EncerrarProcessoComErro(this Exception ex)
         {
             Console.WriteLine(ex.Message);

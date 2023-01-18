@@ -3,42 +3,56 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Desafio2ConversorMoedas
 {
+    /// <summary>
+    /// Define o Validador da conversão de moedas
+    /// </summary>
     public class Validador
     {
-        public string? DadoParaValidar { get; private set; }
         public Validador()
         {
             Dados = new EntradaDadosModel();
         }
-        public EntradaDadosModel Dados { get; set; }
-        public bool IsValidOrigem(string valor = "")
+        private EntradaDadosModel Dados { get; set; }
+        /// <summary>
+        /// Faz as validações para o formato de origem informado
+        /// </summary>
+        /// <param name="valor">Texto para ser verificado</param>
+        /// <returns></returns>
+        public bool IsValidOrigem(string valor)
         {
-            DadoParaValidar = valor != "" ? valor : Dados.Origem;
             try
             {
-                DadoParaValidar.PossuiTresCaracteres();
+                valor.PossuiTresCaracteres();
+                Dados.Origem = valor;
             }
             catch (Exception ex)
             {
                 return ex.EncerrarProcessoComErro();
             }
-            Dados.Origem = DadoParaValidar;
             return true;
         }
-        public bool IsValidDestino(string valor = "")
+        /// <summary>
+        /// Faz as validações para o formato de destino
+        /// </summary>
+        /// <param name="valor">Texto para ser verificado</param>
+        /// <returns></returns>
+        public bool IsValidDestino(string valor)
         {
-            DadoParaValidar = valor != "" ? valor : Dados.Destino;
             try
             {
-                DadoParaValidar.PossuiTresCaracteres();
-                if (DadoParaValidar == Dados.Origem)
+                valor.PossuiTresCaracteres();
+                if (valor == Dados.Origem)
                     throw new Exception("Erro: A moeda de origem deve ser diferente da moeda de destino.");
+
+                Dados.Destino = valor;
             }
             catch (Exception ex)
             {
@@ -46,13 +60,20 @@ namespace Desafio2ConversorMoedas
             }
             return true;
         }
-        public bool IsValidValor(string valor = "")
+        /// <summary>
+        /// Faz as validações para o valor monetário que será convertido
+        /// </summary>
+        /// <param name="valor">Texto para ser verificado</param>
+        /// <returns></returns>
+        public bool IsValidValor(string valor)
         {
-            DadoParaValidar = valor != "" ? valor : Dados.Destino;
-
             try
             {
-                DadoParaValidar.IsValorNumerico();
+                var valorNumero = valor.IsValorNumerico();
+                if (valorNumero < 0)
+                    throw new Exception("Erro: o Valor informado não é maior que zero.");
+
+                Dados.Valor = valorNumero.ToString(CultureInfo.GetCultureInfo("en-US"));
             }
             catch (Exception ex)
             {
@@ -60,13 +81,17 @@ namespace Desafio2ConversorMoedas
             }
             return true;
         }
-        public bool IsValidDados(EntradaDadosModel dadosParaValidacao)
+        public string GetOrigem()
         {
-            Dados.Origem = dadosParaValidacao.Origem;
-            Dados.Destino = dadosParaValidacao.Destino;
-            Dados.Valor = dadosParaValidacao.Valor;
-
-            return IsValidOrigem() && IsValidDestino() && IsValidValor();
+            return Dados.Origem;
+        }
+        public string GetDestino()
+        {
+            return Dados.Destino;
+        }
+        public string GetValor()
+        {
+            return Dados.Valor;
         }
     }
 }
